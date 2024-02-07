@@ -13,6 +13,10 @@ const params = {
   scope: scopes,
 };
 
+const LOGIN_URL =
+  "https://accounts.spotify.com/authorize?" +
+  new URLSearchParams(params).toString();
+
 async function refreshAccessToken(token) {
   // code for refreshing the access token
   const params = newURLSearchParams();
@@ -24,9 +28,7 @@ async function refreshAccessToken(token) {
       Authorization:
         "Basic " +
         new Buffer.from(
-          process.env.SPOTIFY_CLIENT_ID +
-            ":" +
-            process.env.SPOTIFY_CLIENT_SECRET
+          process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET
         ).toString("base64"),
     },
     body: params,
@@ -39,20 +41,16 @@ async function refreshAccessToken(token) {
   };
 }
 
-const LOGIN_URL =
-  "https://accounts.spotify.com/authorize?" +
-  new URLSearchParams(params).toString();
-
-export const authOptions = {
+export default NextAuth({
+  secret: process.env.JWT_SECRET,
   // Configure one or more authentication providers
   providers: [
     SpotifyProvider({
-      clientId: process.env.SPOTIFY_CLIENT_ID,
-      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
       authorization: LOGIN_URL,
     }),
   ],
-  secret: process.env.JWT_SECRET,
   pages: {
     signIn: "/login",
   },
@@ -72,12 +70,13 @@ export const authOptions = {
       // Access Token has expired
       return refreshAccessToken(token);
     },
-    async session({ session, token, user }) {
+    sessiont: {
+      strategy: "jwt",
+    },
+    async session({ session, token }) {
       // Send properties to the client, like an access_token from a provider.
       session.accessToken = token.accessToken;
       return session;
     },
   },
-};
-
-export default NextAuth(authOptions);
+});
