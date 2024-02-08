@@ -1,3 +1,5 @@
+This is a Spotify Clone created on NextJS 14 with NextAuth v4 and TailwindCSS. The SpotifyApi was used to get data directly from a spotify account.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
