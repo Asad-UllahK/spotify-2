@@ -17,8 +17,9 @@ export default function Home() {
           view={view}
           setGlobalPlaylistId={setGlobalPlaylistId}
         />
-        {view === "playlist" && <PlaylistView 
-        globalPlaylistId={globalPlaylistId}/>}
+        {view === "playlist" && (
+          <PlaylistView globalPlaylistId={globalPlaylistId} />
+        )}
         {view === "search" && <Search />}
         {view === "artist" && <Artist />}
         {view === "library" && <Library />}
