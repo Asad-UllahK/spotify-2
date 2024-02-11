@@ -1,9 +1,14 @@
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { shuffle } from "lodash";
+import { set, shuffle } from "lodash";
+import Song from "./Song";
 
-export default function PlaylistView({ globalPlaylistId }) {
+export default function PlaylistView({
+  globalPlaylistId,
+  setGlobalCurrentSongId,
+  setGlobalIsTrackPlaying
+}) {
   const { data: session } = useSession();
   const [playlistData, setPlaylistData] = useState(null);
   const [color, setColor] = useState([0]);
@@ -68,7 +73,14 @@ export default function PlaylistView({ globalPlaylistId }) {
         className="text-white sticky top-0 h-20 z-10 text-2xl bg-neutral-800 p-8 flex items-center font-bold"
       >
         <div style={{ opacity: textOpacity }} className="flex items-center">
-          {playlistData?.name}
+          {playlistData && (
+            <img
+              src={playlistData.images[0].url}
+              alt="Playlist Pic"
+              className="h-8 w-8 mr-6 rounded"
+            />
+          )}
+          <p> {playlistData?.name}</p>
         </div>
       </header>
       <div className="absolute z-20 top-5 right-8 flex items-center bg-black bg-opacity-70 text-white space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2 ">
@@ -91,7 +103,7 @@ export default function PlaylistView({ globalPlaylistId }) {
             <img
               src={playlistData.images[0].url}
               alt="Playlist Pic"
-              className="h-44 w-44"
+              className="h-44 w-44 rounded"
             />
           )}
           <div>
@@ -104,7 +116,15 @@ export default function PlaylistView({ globalPlaylistId }) {
         <div className="text-white px-8 flex flex-col space-y-1 pb-28 ">
           {playlistData?.tracks.items.map((track, i) => {
             // put songs component over here
-            return <div key={track.track.id}>{track.track.name}</div>;
+            return (
+              <Song
+                setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+                setGlobalCurrentSongId={setGlobalCurrentSongId}
+                key={track.track.id}
+                sno={i}
+                track={track.track}
+              />
+            );
           })}
         </div>
       </div>
