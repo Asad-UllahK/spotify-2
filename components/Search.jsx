@@ -2,7 +2,7 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import React, { useEffect, useRef, useState } from "react";
 import FeaturedPlaylist from "./FeaturedPlaylist";
 import SearchResults from "./SearchResults";
@@ -20,6 +20,11 @@ export default function Search({
   const inputRef = useRef(null);
 
   async function updateSearchResults(query) {
+    if (query.trim() === "") {
+      // If the query is empty, reset the searchData state to null
+      setSearchData(null);
+      return;
+    }
     const response = await fetch(
       "https://api.spotify.com/v1/search?" +
         new URLSearchParams({
@@ -74,7 +79,7 @@ export default function Search({
           />
         ) : (
           <SearchResults
-            playlists={searchData?.playlists.items}
+            playlists={searchData?.playlists?.items}
             songs={searchData?.tracks.items}
             artists={searchData?.artists.items}
             setView={setView}

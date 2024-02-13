@@ -1,7 +1,6 @@
 // currently at 3:03:11 of https://www.youtube.com/watch?v=qFN6zQZU9jU&ab_channel=ApoorvNandan
 
 import { PauseCircleIcon, PlayCircleIcon } from "@heroicons/react/24/solid";
-import { method } from "lodash";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
