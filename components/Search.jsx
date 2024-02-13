@@ -2,7 +2,7 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import React, { useEffect, useRef, useState } from "react";
 import FeaturedPlaylist from "./FeaturedPlaylist";
 import SearchResults from "./SearchResults";
