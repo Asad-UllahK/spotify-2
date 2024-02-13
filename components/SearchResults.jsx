@@ -1,5 +1,3 @@
-// Continue at https://youtu.be/qFN6zQZU9jU?t=14755
-
 import { PlayIcon } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
 import React from "react";

@@ -1,5 +1,3 @@
-// currently at 3:03:11 of https://www.youtube.com/watch?v=qFN6zQZU9jU&ab_channel=ApoorvNandan
-
 import { PauseCircleIcon, PlayCircleIcon } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
@@ -19,7 +17,7 @@ export default function Player({
         `https://api.spotify.com/v1/tracks/${trackId}`,
         {
           headers: {
-            Authorization: `Bearer ${session.accessToken}`, // Use backticks for string interpolation
+            Authorization: `Bearer ${session.accessToken}`,
           },
         }
       );
@@ -37,7 +35,11 @@ export default function Player({
         },
       }
     );
-    const data = response.json();
+    if (response.status == 204) {
+      console.log("204 response from currently playing");
+      return;
+    }
+    const data = await response.json();
     return data;
   }
 
@@ -76,11 +78,11 @@ export default function Player({
   }
 
   useEffect(() => {
-    // fetch sing details and play song
-    async function fetchData() {
+    // fetch song details and play song
+    async function f() {
       if (session && session.accessToken) {
         if (!globalCurrentSongId) {
-          // get currently playing song from spotify
+          // get the currently playing song from spotify
           const data = await getCurrentlyPlaying();
           setGlobalCurrentSongId(data?.item?.id);
           if (data.is_playing) {
@@ -93,13 +95,13 @@ export default function Player({
         }
       }
     }
-    fetchData();
+    f();
   }, [globalCurrentSongId]);
 
   return (
     <div className="h-24 bg-neutral-800 border-t border-neutral-700 text-white grid grid-cols-3 text-xs md:text-base px-2 md:px-8">
       <div className="flex items-center space-x-4">
-        {songInfo?.album.images[0]?.url && (
+        {songInfo?.album.images[0].url && (
           <img
             className="hidden md:inline h-10 w-10"
             src={songInfo.album.images[0].url}
