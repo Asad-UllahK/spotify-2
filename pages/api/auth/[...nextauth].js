@@ -18,7 +18,6 @@ const LOGIN_URL =
   new URLSearchParams(params).toString();
 
 async function refreshAccessToken(token) {
-  // code for refreshing the access token
   const params = newURLSearchParams();
   params.append("grant_type", "refresh_token");
   params.append("refresh_token", token.refreshToken);
@@ -51,6 +50,7 @@ export default NextAuth({
       authorization: LOGIN_URL,
     }),
   ],
+  secret: process.env.JWT_SECRET,
   pages: {
     signIn: "/login",
   },
@@ -64,11 +64,14 @@ export default NextAuth({
         return token;
       }
       // Access Token has not Expired
-      if (Date.now() < token.accessTokenExpires * 1000) {
+      if (
+        token.accessTokenExpires &&
+        Date.now() < token.accessTokenExpires * 1000
+      ) {
         return token;
       }
       // Access Token has expired
-      return refreshAccessToken(token);
+      return await refreshAccessToken(token);
     },
     sessiont: {
       strategy: "jwt",

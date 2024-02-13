@@ -1,11 +1,13 @@
-import React from "react";
 import { signIn } from "next-auth/react";
 
 export default function login() {
   return (
-    <div className="flex item-center justify-center h-screen text-4xl">
-      <button onClick={() => signIn("spotify", { callbackUrl: "/" }) }>
-        Login
+    <div className="w-full h-screen flex items-center justify-center">
+      <button
+        className="text-white px-8 py-2 rounded-full bg-green-500 font-bold text-lg"
+        onClick={() => signIn("spotify", { callbackUrl: "/" })}
+      >
+        Login with spotify
       </button>
     </div>
   );
